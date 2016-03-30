@@ -1,0 +1,30 @@
+    def resetBoard(self):
+    def setFEN(self,fen):
+            newstate += str("abcdefgh".index(fparts[3][0].lower()))
+    def getFEN(self):
+                ep = "%s%s" % ( ("abcdefgh")[x], ("87654321")[y+1])
+                ep = "%s%s" % ( ("abcdefgh")[x], ("87654321")[y-1])                                   
+    def getMoveCount(self):
+    def getCurrentMove(self):
+    def gotoMove(self,move):
+    def gotoFirst(self):
+    def gotoLast(self):
+    def undo(self):
+    def redo(self):
+    def setPromotion(self, promotion):
+    def getPromotion(self):
+    def isCheck(self):
+    def isGameOver(self):
+    def getGameResult(self):
+    def getBoard(self):
+    def getTurn(self):
+    def getReason(self):
+    def getValidMoves(self,location):
+    def addMove(self,fromPos,toPos):
+    def getLastMoveType(self):
+    def getLastMove(self):
+    def addTextMove(self,txt):
+    def getAllTextMoves(self,format=1):
+    def getLastTextMove(self,format=1):
+    def printBoard(self):
+

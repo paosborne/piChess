@@ -1,0 +1,67 @@
+Todo list
+=========
+
+BUGS:
+MAJOR:
+DONE 1. pawn promotion handling 
+DONE 2. FEN string extraction issue in ChessBoard.py
+
+MINOR:
+Occasionaly the engine returns a null response which is invalid.
+  No idea why, but it seems to be every few hundred games so 
+  I am going to bung that as a low risk bug
+
+
+==========================================================
+
+Hardware:
+DONE:  handle the LEDs
+add 2 LEDs for B/W
+handle the LCD display
+handle the board switches
+handle control switches
+On off switch?
+
+===========================================================
+
+Sofware:
+Change engine to stockfish5 so we can use an opening book?
+Turn off pi mid game and save game state (FEN and move list)
+Turn on pi and autoload saved game state (FEN and move list)
+Set initial level of play
+add a pause into each level as it plays - illusion of thinking...
+remove the double LED on/off
+remove debug messages from pawn promotion (runs twice)
+DONE:changing level
+DONE:style of play
+Ensure stockfish is killed on game exit
+
+===========================================================
+lichess.org  Level settings for stockfish:
+AI level 1: skill 3/20, depth 1, 50ms
+AI level 2: skill 6/20, depth 2, 100ms
+AI level 3: skill 9/20, depth 3, 150ms
+AI level 4: skill 11/20, depth 4, 200ms
+AI level 5: skill 14/20, depth 6, 250ms
+AI level 6: skill 17/20, depth 8, 300ms
+AI level 7: skill 20/20, depth 10, 350ms
+AI level 8: skill 20/20, depth 12, 400ms
+
+  # skill, depth, time
+  engine_levels = array([0,0,0],[3,1,50],[6,2,100],[9,3,150],[11,4,200],
+                        [14,6,250],[17,8,300],[20,10,350],[20,12,400])
+  sleep(.2)
+  response = ""
+
+  skill = engine_levels[level,1]
+  depth = engine_levels[level,2]
+  mtime = engine_levels[level,3]
+  putEngine('setoption name Skill Level value ' + skill)
+  waitEngine()
+
+===========================================================
+
+Wish list:
+Setup game position 
+position fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+Run an analysis mode?

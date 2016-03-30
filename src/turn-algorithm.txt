@@ -1,0 +1,34 @@
+
+
+turn (PLAYER, fen, movelist){
+
+  white
+  play_move(PLAYER,fen, movelist)
+
+  black
+  play_move(PLAYER,fen, movelist)
+
+  return fen, movelist
+
+}
+
+
+
+play_move(PLAYER,fen){
+
+  if ( PLAYER is HUMAN ) then{
+    while (not valid move){
+      get move from HUMAN and validate
+      set hint to NONE
+    }
+  } else {
+    get move from COMPUTER 
+    get hint from COMPUTER
+  }
+
+  check ?
+  game_status
+
+  return fen, movelist, hint
+}
+
