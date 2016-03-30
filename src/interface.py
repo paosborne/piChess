@@ -68,22 +68,17 @@ wiringpi.lcdPuts(lcd, "it works!")
 # initiate stockfish chess engine
 ######################################################################
 
-engine = subprocess.Popen('/usr/games/stockfish6', 
+engine = subprocess.Popen('/usr/local/bin/stockfish6', 
 		universal_newlines=True, 
 		stdin=subprocess.PIPE, 
 		stdout=subprocess.PIPE,);
 
 ######################################################################
-# Set Skill Level  (0-20)
+# Set Skill Level  (1-8)
 ######################################################################
 
 def level(skill, depth):
-#  level = raw_input("\nBOARD engine skill level 0-20:").lower()
-#  putEngine('setoption name Skill Level value ' + level)
-#  waitEngine()
 
-
-#
 #lichess.org  Level settings for stockfish:
 #
 #AI level 1: skill 3/20, depth 1, 50ms
@@ -95,22 +90,40 @@ def level(skill, depth):
 #AI level 7: skill 20/20, depth 10, 350ms
 #AI level 8: skill 20/20, depth 12, 400ms
 
-  level = raw_input("\nBOARD engine skill level 1-8:").lower()
-  # skill, depth, time
-  engine_levels=array("c",[["0","0","0"],["3","1","50"],["6","2","100"],["9","3","150"],["11","4","200"],
-                        ["14","6","250"],["17","8","300"],["20","10","350"],["20","12","400"]])
+  level = int(input("\nBOARD engine skill level 1-8:"))
+
+  engineLevels = []
+  engineLevels.append(['level', 'skill', 'depth','ms'])
+  engineLevels.append(['1', '3', '1', '50'])
+  engineLevels.append(['2', '6', '2', '100'])
+  engineLevels.append(['3', '9', '3', '150'])
+  engineLevels.append(['4', '11', '4', '200'])
+  engineLevels.append(['5', '14', '6', '250'])
+  engineLevels.append(['6', '17', '8', '300'])
+  engineLevels.append(['7', '20', '10', '350'])
+  engineLevels.append(['8', '20', '12', '400'])
+
+
   sleep(.2)
   response = ""
 
-  skill = engine_levels[level,1]
-  depth = engine_levels[level,2]
-  mtime = engine_levels[level,3]
-  print('Level: ' + level)
+  lvl = engineLevels[level][0]
+  skill = engineLevels[level][1]
+  depth = engineLevels[level][2]
+  mtime = engineLevels[level][3]
+
+  print('Level: ' + lvl)
   print('Skill: ' + skill)
   print('Depth: ' + depth)
+  print('Ms: ' + mtime)
   putEngine('setoption name Skill Level value ' + skill)
   waitEngine()
   return skill, depth
+
+
+
+
+
 
 
 
@@ -132,7 +145,7 @@ def waitEngine():
   engine.stdin.write("isready\n")
   while True:
     text = engine.stdout.readline().strip()
-#    print ("engine: " + text)
+    print ("engine: " + text)
     if text == "readyok":
       break
 
@@ -146,7 +159,7 @@ def moveEngine():
   while True:
     sleep(.05)
     response = engine.stdout.readline().strip()
-    #print ("engine: " + response)
+    print ("engine: " + response)
     # found the engine's move - so return the entire line - also 
     # contains the hint for the player
     if response[0:8] == "bestmove":
@@ -198,7 +211,7 @@ def newGame():
   waitEngine()
   # Set threads to no of CPU cores available - hard setting 2, could
   # pull this out of the system - job for another day
-  putEngine('setoption name Threads value 2')
+  putEngine('setoption name Threads value 4')
   waitEngine()
   putEngine('uci')
   waitEngine()
@@ -391,11 +404,11 @@ def playTurn(player, fen, move_list, hint, skill, depth):
   depth = depth
   # white first
   whoseTurn()
-  player, fen, move_list, hint = playMove(player, fen, move_list, hint, skill, depth)
+  player, fen, move_list, hint, skill, depth =  playMove(player, fen, move_list, hint, skill, depth)
 #  saveFEN(fen)
   # black second
   whoseTurn()
-  player, fen, move_list, hint = playMove(player, fen, move_list, hint, skill, depth)
+  player, fen, move_list, hint, skill, depth = playMove(player, fen, move_list, hint, skill, depth)
 #  saveFEN(fen)
 
   return (player, fen, move_list, hint, skill, depth)
@@ -412,19 +425,13 @@ def playMove(player, fen, move_list, hint, skill, depth):
   skill = skill
   depth = depth
   valid_response = 'FALSE'
-  SELF='NO'
+  # Computer plays itself?
+  SELF='YES'
   print("moves: " + move_list)
   if player == "HUMAN":
     while valid_response == 'FALSE':
       # get human input and process accordingly (subroutine?) as
       # may be hint request, level change or even a move 
-
-#      # to force the computer to play itself, comment the
-#      # next line, uncomment the following one and uncomment the third line.
-#      bmessage = getBoard()
-#      #code = 'c'
-#      # Message options   Move, Newgame, level, style
-#      code = bmessage[0]
 
       if SELF == 'YES':
         code = 'c'
@@ -792,8 +799,8 @@ wiringpi.lcdPuts(lcd, "by Stockfish")
 print ("LCD: Welcome to piChess")
 # Skill level 1-8 - default to 1 - far to good for me to play against!
 # see levels() for details...
-skill = "2"
-depth = "1"
+skill = "8"
+depth = "5"
 # minimum thinking time - we don't use this
 movetime = "2000"
 # list of moves

@@ -4,7 +4,7 @@
 #
 ######################################################################
 
-import wiringpi2 as wiringpi
+import wiringpi as wiringpi
 from time import sleep
 
 
